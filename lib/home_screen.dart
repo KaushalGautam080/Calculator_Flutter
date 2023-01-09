@@ -1,5 +1,6 @@
 import 'package:calculator_app/components/buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,10 +24,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      userInput.toString(),
-                      style: TextStyle(fontSize: 30, color: Colors.white),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        userInput.toString(),
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Text(
                       output.toString(),
@@ -104,9 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                       Button(
-                        title: '*',
+                        title: 'x',
                         onPress: () {
-                          userInput += '*';
+                          userInput += 'x';
                           setState(() {});
                         },
                       ),
@@ -204,13 +213,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: 'Del',
                           color: Colors.grey,
                           onPress: () {
-                            userInput += '+/-';
+                            userInput =
+                                userInput.substring(0, userInput.length - 1);
                             setState(() {});
                           }),
                       Button(
                         title: '=',
                         onPress: () {
-                          userInput += '=';
+                          equalPress();
                           setState(() {});
                         },
                       ),
@@ -223,5 +233,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void equalPress() {
+    String finaluserInput = userInput;
+    finaluserInput = userInput.replaceAll('x', '*');
+    Parser p = Parser();
+    Expression exp = p.parse(finaluserInput);
+    ContextModel ctx = ContextModel();
+    double eval = exp.evaluate(EvaluationType.REAL, ctx);
+    output = eval.toString();
   }
 }
