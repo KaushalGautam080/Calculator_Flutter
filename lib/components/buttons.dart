@@ -15,7 +15,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: InkWell(
           onTap: onPress,
           child: Container(
